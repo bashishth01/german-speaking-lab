@@ -6,24 +6,29 @@
 <title>Deutsch Sprechen Lab</title>
 <style>
   body{margin:0;background:#F4F6FC;color:#0B2160;font-family:'Nunito Sans',Arial,sans-serif}
-  main{max-width:720px;margin:0 auto;padding:48px 24px}
-  img{width:260px;height:auto}
-  h1{font-size:36px;margin:32px 0 8px}
-  p{color:#3C4A6B;line-height:1.5}
+  header{position:sticky;top:0;z-index:10;background:#F4F6FC;border-bottom:1px solid #D5DEF2}
+  .bar{max-width:720px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar img{width:200px;height:auto;display:block}
+  a.fb{background:#0B2160;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:12px;white-space:nowrap}
+  a.fb:hover{background:#2A5CC4}
+  main{max-width:720px;margin:0 auto;padding:32px 24px 48px}
+  h1{font-size:36px;margin:0 0 8px}
   a.day{display:block;background:#fff;border:1px solid #D5DEF2;border-radius:14px;padding:18px 22px;margin:12px 0;color:#0B2160;text-decoration:none;font-weight:700}
   a.day span{display:block;font-weight:400;color:#3C4A6B;margin-top:4px}
   a.day:hover{border-color:#2A5CC4}
-  a.fb{display:inline-block;margin-top:24px;background:#0B2160;color:#fff;text-decoration:none;font-weight:700;padding:14px 26px;border-radius:12px}
-  a.fb:hover{background:#2A5CC4}
 </style>
 </head>
 <body>
+<header>
+  <div class="bar">
+    <img src="assets/logo.png" alt="TerraTern logo">
+    <a class="fb" href="https://forms.gle/6yevrrxioBdFAuEVA" target="_blank" rel="noopener">Feedback geben</a>
+  </div>
+</header>
 <main>
-  <img src="assets/logo.png" alt="TerraTern logo">
   <h1>Deutsch Sprechen Lab</h1>
   <a class="day" href="day-03/">Tag 3<span>Sprechen für alle: Spiele, Paare, Gruppen. Ohne Timer.</span></a>
   <a class="day" href="day-02/">Tag 2<span>Satzbau, Fehlerjagd, Rollenspiele, Debatte</span></a>
-  <a class="fb" href="https://forms.gle/6yevrrxioBdFAuEVA" target="_blank" rel="noopener">Feedback geben</a>
 </main>
 </body>
 </html>
