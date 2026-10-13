@@ -38,6 +38,7 @@
   function stopTimer() { if (tick) { clearInterval(tick); tick = null; } }
   function startTimer() {
     stopTimer(); paused = false;
+    var pb = document.getElementById('bPause'); if (pb) pb.textContent = '⏸ Pause';
     timerEl = slides[cur].querySelector('.timer');
     if (!timerEl) return;
     total = left = +timerEl.dataset.seconds || 60;
@@ -80,22 +81,68 @@
     else if (k === 'Home') show(0);
     else if (k === 'End') show(slides.length - 1);
     else if (k === 't' || k === 'T') startTimer();
-    else if (k === 'p' || k === 'P') { paused = !paused; paint(); }
+    else if (k === 'p' || k === 'P') togglePause();
     else if (k === 'n' || k === 'N') notesEl.classList.toggle('on');
-    else if (k === 'f' || k === 'F') {
-      if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
-    }
+    else if (k === 'f' || k === 'F') toggleFull();
   });
+  function togglePause() {
+    if (!timerEl) return;
+    if (left <= 0) { startTimer(); return; }   // finished: tapping starts it again
+    paused = !paused; paint();
+    var pb = document.getElementById('bPause');
+    if (pb) pb.textContent = paused ? '▶ Weiter' : '⏸ Pause';
+  }
+  function toast(msg) {
+    var t = document.getElementById('toast');
+    if (!t) {
+      t = document.createElement('div'); t.id = 'toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg; t.classList.add('on');
+    clearTimeout(toast._h); toast._h = setTimeout(function () { t.classList.remove('on'); }, 3500);
+  }
+  function toggleFull() {
+    var d = document, el = d.documentElement;
+    try {
+      if (d.fullscreenElement || d.webkitFullscreenElement) {
+        (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+        return;
+      }
+      var req = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (!req) { toast('Vollbild nicht möglich hier. Bitte F11 drücken.'); return; }
+      var p = req.call(el);
+      if (p && p.catch) p.catch(function () { toast('Vollbild blockiert. Bitte F11 drücken.'); });
+    } catch (err) { toast('Vollbild blockiert. Bitte F11 drücken.'); }
+  }
+  document.addEventListener('fullscreenchange', fit);
+  document.addEventListener('webkitfullscreenchange', fit);
   stage.addEventListener('click', function (e) {
-    if (e.target.closest('.timer')) { startTimer(); return; }
+    if (e.target.closest('.timer')) { togglePause(); return; }   // click timer = pause / resume
     next();
   });
-  document.getElementById('bPrev').onclick = function (e) { e.stopPropagation(); prev(); };
-  document.getElementById('bNext').onclick = function (e) { e.stopPropagation(); next(); };
-  document.getElementById('bFull').onclick = function (e) {
-    e.stopPropagation();
-    if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();
-  };
+  stage.addEventListener('dblclick', function (e) {
+    if (e.target.closest('.timer')) { e.preventDefault(); startTimer(); }  // double-click timer = restart
+  });
+  // build the control buttons (so every day page gets them without HTML changes)
+  var nav = document.getElementById('nav');
+  function mk(id, label, title, fn) {
+    var b = document.getElementById(id) || document.createElement('button');
+    b.id = id; b.textContent = label; b.title = title; b.tabIndex = -1;
+    b.addEventListener('mousedown', function (e) { e.preventDefault(); }); // keep keyboard focus off buttons
+    b.addEventListener('click', function (e) { e.stopPropagation(); fn(); });
+    if (!b.parentNode) nav.insertBefore(b, document.getElementById('count'));
+    return b;
+  }
+  mk('bPrev', '◀', 'Zurück', prev);
+  var cnt = document.getElementById('count');
+  mk('bPause', '⏸ Pause', 'Timer pausieren / fortsetzen (P)', togglePause);
+  mk('bRestart', '↺ Neu', 'Timer neu starten (T)', startTimer);
+  var bn = document.getElementById('bNext'); bn.tabIndex = -1;
+  bn.addEventListener('mousedown', function (e) { e.preventDefault(); });
+  bn.addEventListener('click', function (e) { e.stopPropagation(); next(); });
+  var bf = document.getElementById('bFull'); bf.tabIndex = -1; bf.title = 'Vollbild (F)';
+  bf.addEventListener('mousedown', function (e) { e.preventDefault(); });
+  bf.addEventListener('click', function (e) { e.stopPropagation(); toggleFull(); });
   addEventListener('resize', fit);
   fit();
   var start = parseInt((location.hash || '').slice(1), 10);
