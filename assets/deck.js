@@ -84,6 +84,7 @@
     else if (k === 'p' || k === 'P') togglePause();
     else if (k === 'n' || k === 'N') notesEl.classList.toggle('on');
     else if (k === 'f' || k === 'F') toggleFull();
+    else if (k === 'h' || k === 'H') goList();
   });
   function togglePause() {
     if (!timerEl) return;
@@ -133,6 +134,9 @@
     if (!b.parentNode) nav.insertBefore(b, document.getElementById('count'));
     return b;
   }
+  function goList() { location.href = '../'; }
+  var bh = mk('bHome', '☰ Liste', 'Zurück zur Tagesliste (H)', goList);
+  nav.insertBefore(bh, nav.firstChild);
   mk('bPrev', '◀', 'Zurück', prev);
   var cnt = document.getElementById('count');
   mk('bPause', '⏸ Pause', 'Timer pausieren / fortsetzen (P)', togglePause);
