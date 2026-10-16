@@ -127,17 +127,31 @@
   document.addEventListener('fullscreenchange', fit);
   document.addEventListener('webkitfullscreenchange', fit);
   /* listening: play a recorded file (data-audio) or read the German text aloud (data-say) */
-  var voices = [], audioEl = null;
+  var voices = [], audioEl = null, seqId = 0;
   function loadVoices() { voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
   if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
   function stopSound() {
+    seqId++;                                  // cancels a running dialogue sequence
     if (window.speechSynthesis) speechSynthesis.cancel();
     if (audioEl) { audioEl.pause(); audioEl = null; }
   }
   function play(btn) {
     stopSound();
+    var rate = parseFloat(btn.dataset.rate) || 1;
+    if (btn.dataset.seq) {                    // dialogue: several mp3 files, played one after another
+      var files = btn.dataset.seq.split(','), gap = parseInt(btn.dataset.gap || '600', 10), mine = seqId, i = 0;
+      (function nextFile() {
+        if (mine !== seqId || i >= files.length) return;
+        audioEl = new Audio(files[i++]);
+        audioEl.playbackRate = rate;
+        audioEl.onended = function () { setTimeout(nextFile, gap); };
+        audioEl.play().catch(function () { toast('Audio konnte nicht gestartet werden.'); });
+      })();
+      return;
+    }
     if (btn.dataset.audio) {
       audioEl = new Audio(btn.dataset.audio);
+      audioEl.playbackRate = rate;
       audioEl.play().catch(function () { toast('Audio konnte nicht gestartet werden.'); });
       return;
     }
