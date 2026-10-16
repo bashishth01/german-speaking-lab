@@ -96,6 +96,7 @@
     else if (k === 'l' || k === 'L') { var lb = slides[cur].querySelector('.listen'); if (lb) play(lb); }
   });
   function togglePause() {
+    if (soundActive()) { toggleSound(); return; }   // audio playing or paused: pause / resume it
     if (!timerEl) return;
     if (left <= 0) { startTimer(); return; }   // finished: tapping starts it again
     paused = !paused; paint();
@@ -134,6 +135,26 @@
     seqId++;                                  // cancels a running dialogue sequence
     if (window.speechSynthesis) speechSynthesis.cancel();
     if (audioEl) { audioEl.pause(); audioEl = null; }
+    soundPaused = false; pendingNext = null; setPauseLabel(false);
+  }
+  var soundPaused = false, pendingNext = null;
+  function setPauseLabel(on) { var pb = document.getElementById('bPause'); if (pb) pb.textContent = on ? '▶ Weiter' : '⏸ Pause'; }
+  function soundActive() {
+    if (soundPaused) return true;
+    if (audioEl && !audioEl.ended && !audioEl.paused) return true;
+    return !!(window.speechSynthesis && speechSynthesis.speaking);
+  }
+  function toggleSound() {
+    if (soundPaused) {
+      soundPaused = false; setPauseLabel(false);
+      if (audioEl && !audioEl.ended) audioEl.play();
+      else if (pendingNext) { var f = pendingNext; pendingNext = null; f(); }
+      if (window.speechSynthesis && speechSynthesis.paused) speechSynthesis.resume();
+    } else {
+      soundPaused = true; setPauseLabel(true);
+      if (audioEl && !audioEl.ended) audioEl.pause();
+      if (window.speechSynthesis && speechSynthesis.speaking) speechSynthesis.pause();
+    }
   }
   function play(btn) {
     stopSound();
@@ -142,9 +163,10 @@
       var files = btn.dataset.seq.split(','), gap = parseInt(btn.dataset.gap || '600', 10), mine = seqId, i = 0;
       (function nextFile() {
         if (mine !== seqId || i >= files.length) return;
+        if (soundPaused) { pendingNext = nextFile; return; }
         audioEl = new Audio(files[i++]);
         audioEl.playbackRate = rate;
-        audioEl.onended = function () { setTimeout(nextFile, gap); };
+        audioEl.onended = function () { setTimeout(nextFile, gap); if (i >= files.length) setPauseLabel(false); };
         audioEl.play().catch(function () { toast('Audio konnte nicht gestartet werden.'); });
       })();
       return;
@@ -186,7 +208,7 @@
   nav.insertBefore(bh, nav.firstChild);
   mk('bPrev', '◀', 'Zurück', prev);
   var cnt = document.getElementById('count');
-  mk('bPause', '⏸ Pause', 'Timer pausieren / fortsetzen (P)', togglePause);
+  mk('bPause', '⏸ Pause', 'Audio oder Timer pausieren / fortsetzen (P)', togglePause);
   mk('bRestart', '↺ Neu', 'Timer neu starten (T)', startTimer);
   var bn = document.getElementById('bNext'); bn.tabIndex = -1;
   bn.addEventListener('mousedown', function (e) { e.preventDefault(); });
