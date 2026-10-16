@@ -54,6 +54,7 @@
     }, 1000);
   }
   function show(i, atEnd) {
+    if (typeof stopSound === 'function') stopSound();
     cur = Math.max(0, Math.min(slides.length - 1, i));
     slides.forEach(function (s, k) { s.classList.toggle('active', k === cur); });
     step = atEnd ? steps(slides[cur]) : 0;
@@ -85,6 +86,7 @@
     else if (k === 'n' || k === 'N') notesEl.classList.toggle('on');
     else if (k === 'f' || k === 'F') toggleFull();
     else if (k === 'h' || k === 'H') goList();
+    else if (k === 'l' || k === 'L') { var lb = slides[cur].querySelector('.listen'); if (lb) play(lb); }
   });
   function togglePause() {
     if (!timerEl) return;
@@ -117,7 +119,31 @@
   }
   document.addEventListener('fullscreenchange', fit);
   document.addEventListener('webkitfullscreenchange', fit);
+  /* listening: play a recorded file (data-audio) or read the German text aloud (data-say) */
+  var voices = [], audioEl = null;
+  function loadVoices() { voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+  if (window.speechSynthesis) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+  function stopSound() {
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    if (audioEl) { audioEl.pause(); audioEl = null; }
+  }
+  function play(btn) {
+    stopSound();
+    if (btn.dataset.audio) {
+      audioEl = new Audio(btn.dataset.audio);
+      audioEl.play().catch(function () { toast('Audio konnte nicht gestartet werden.'); });
+      return;
+    }
+    if (!window.speechSynthesis) { toast('Vorlesen geht in diesem Browser nicht. Bitte Edge oder Chrome benutzen.'); return; }
+    var u = new SpeechSynthesisUtterance(btn.dataset.say);
+    u.lang = 'de-DE'; u.rate = parseFloat(btn.dataset.rate) || 0.9;
+    var v = voices.filter(function (x) { return /^de/i.test(x.lang); })[0];
+    if (v) u.voice = v; else toast('Keine deutsche Stimme gefunden. Bitte Edge oder Chrome benutzen.');
+    speechSynthesis.speak(u);
+  }
   stage.addEventListener('click', function (e) {
+    var lb = e.target.closest('.listen');
+    if (lb) { play(lb); return; }                                // listening buttons never advance the slide
     if (e.target.closest('.timer')) { togglePause(); return; }   // click timer = pause / resume
     next();
   });

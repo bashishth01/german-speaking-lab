@@ -94,6 +94,24 @@ h3{font-size:44px;font-weight:600;line-height:1.2}
 .stmt{display:flex;gap:28px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 32px}
 .stmt .n{font-family:'Rubik',Arial,sans-serif;font-size:44px;font-weight:700;color:var(--blue)}
 .stmt .t{font-size:44px;font-weight:600;line-height:1.2}
+/* layouts added for topic decks */
+.pairs.narrow{grid-template-columns:360px 1fr}
+.pairs .card .opt{font-size:28px;line-height:1.35;color:var(--ink2)}
+.pairs .card .q{font-size:32px;font-weight:700;line-height:1.3;color:var(--navy)}
+.pairs .answer .small{font-size:28px;line-height:1.35;color:var(--soft)}
+.doc{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 40px;font-size:32px;line-height:1.5;color:var(--navy);display:flex;flex-direction:column;gap:12px}
+.doc .subj{font-weight:700;color:var(--blue)}
+.listen{display:inline-flex;align-items:center;gap:16px;background:var(--navy);color:#fff;border:0;border-radius:16px;padding:20px 36px;font:700 40px 'Rubik',Arial,sans-serif;cursor:pointer}
+.listen.slow{background:var(--blue)}
+.listen:hover{background:var(--blue)}
+.listenrow{display:flex;gap:20px;align-items:center}
+.listenrow .hint{font-size:28px;color:var(--ink2)}
+.shadow{display:flex;align-items:center;gap:28px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 32px}
+.shadow .listen{padding:14px 28px;font-size:32px}
+.shadow .t{font-size:32px;line-height:1.4;color:var(--navy)}
+.optrow{display:flex;gap:16px;flex-wrap:wrap}
+.optrow .o{font-size:32px;font-weight:600;background:var(--pale);border:2px solid var(--sky);border-radius:14px;padding:12px 24px;color:var(--navy)}
+.wrong .label{color:var(--red)}
 /* navigation chrome (outside the 1920x1080 stage) */
 #progress{position:fixed;left:0;bottom:0;height:6px;background:var(--orange);width:0;transition:width .25s}
 #nav{position:fixed;left:10px;top:10px;display:flex;gap:6px;opacity:.55;transition:opacity .25s;z-index:6}

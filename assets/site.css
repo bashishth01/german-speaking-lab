@@ -1,0 +1,29 @@
+*{box-sizing:border-box}
+body{margin:0;background:#F4F6FC;color:#0B2160;font-family:'Nunito Sans',Arial,sans-serif}
+header{position:sticky;top:0;z-index:10;background:#F4F6FC;border-bottom:1px solid #D5DEF2}
+.bar{max-width:980px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.bar img{width:200px;height:auto;display:block}
+a.fb{background:#0B2160;color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:12px;white-space:nowrap}
+a.fb:hover{background:#2A5CC4}
+main{max-width:980px;margin:0 auto;padding:32px 24px 64px}
+h1{font-family:'Rubik',Arial,sans-serif;font-size:38px;margin:0 0 24px}
+h2{font-family:'Rubik',Arial,sans-serif;font-size:22px;margin:36px 0 12px;color:#2A5CC4;text-transform:uppercase;letter-spacing:1.5px}
+.crumb{display:inline-block;margin-bottom:12px;color:#2A5CC4;text-decoration:none;font-weight:700}
+.crumb:hover{text-decoration:underline}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+a.mod{display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid #D5DEF2;border-radius:18px;padding:26px 28px;color:#0B2160;text-decoration:none;min-height:150px}
+a.mod:hover{border-color:#2A5CC4;box-shadow:0 6px 18px rgba(11,33,96,.08)}
+a.mod .k{font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#2A5CC4}
+a.mod .n{font-family:'Rubik',Arial,sans-serif;font-size:32px;font-weight:700}
+a.mod .d{color:#3C4A6B;line-height:1.45}
+.topics{display:flex;flex-direction:column;gap:12px}
+.topic{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid #D5DEF2;border-radius:14px;padding:18px 22px;color:#0B2160;text-decoration:none}
+a.topic:hover{border-color:#2A5CC4}
+.topic .t{font-weight:700;font-size:18px}
+.topic .s{display:block;font-weight:400;color:#3C4A6B;margin-top:3px;font-size:15px}
+.chips{display:flex;gap:8px;flex-shrink:0}
+.chip{font-size:13px;font-weight:700;border-radius:999px;padding:5px 12px;background:#E3EBFC;color:#0B2160;border:1px solid #8FB2FF}
+.chip.ok{background:#0B2160;color:#fff;border-color:#0B2160}
+.chip.soon{background:#F4F6FC;color:#4A5878;border-color:#D5DEF2}
+.topic.off{opacity:.6;cursor:default}
+@media (max-width:640px){.grid{grid-template-columns:1fr}.bar img{width:150px}}
