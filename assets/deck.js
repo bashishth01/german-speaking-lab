@@ -56,6 +56,13 @@
   function show(i, atEnd) {
     if (typeof stopSound === 'function') stopSound();
     cur = Math.max(0, Math.min(slides.length - 1, i));
+    // video slides: load only the visible slide's iframe, unload the others (stops playback)
+    slides.forEach(function (sl, k) {
+      sl.querySelectorAll('iframe[data-src]').forEach(function (f) {
+        if (k === cur) { if (f.getAttribute('src') !== f.dataset.src) f.setAttribute('src', f.dataset.src); }
+        else if (f.getAttribute('src') && f.getAttribute('src') !== 'about:blank') f.setAttribute('src', 'about:blank');
+      });
+    });
     slides.forEach(function (s, k) { s.classList.toggle('active', k === cur); });
     step = atEnd ? steps(slides[cur]) : 0;
     applyStep();
