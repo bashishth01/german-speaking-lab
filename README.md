@@ -1,4 +1,4 @@
-﻿# Deutsch Prüfungsvorbereitung
+# Deutsch Prüfungsvorbereitung
 
 Topic-based prep content, organised by module:
 
@@ -7,11 +7,11 @@ Topic-based prep content, organised by module:
 - `lesen/`      Reading
 - `interview/`  Interview (general + profession-specific, incl. "Warum Deutschland?")
 
-Each module has an `index.html` (topic list) and one folder per topic (`<module>/<topic>/index.html`, a slide deck).
+Modules open into group cards (e.g. `sprechen/alltag/`, `lesen/medien/`, `hoeren/berufe/healthcare/dialoge/`), and each group lists its topics. A topic is a folder with an `index.html` slide deck.
 Shared engine and styles are in `assets/`.
 
 ## Present
-Keys: Space/click = next, Left = back, H = back to list, T = restart timer, P = pause, N = mentor notes, F = fullscreen, L = play listening audio.
+Keys: Space/click = next, Left = back, H = back to list, T = restart timer, P = pause audio or timer, N = mentor notes, F = fullscreen, L = play listening audio.
 
 ## Add a topic
 1. Copy an existing topic folder, edit its `<section class="slide">` blocks.
